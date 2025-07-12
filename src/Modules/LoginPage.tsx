@@ -10,7 +10,6 @@ import {
   TextField,
 } from "@mui/material";
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { ReactElement, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
@@ -21,15 +20,7 @@ import { connect } from "react-redux";
 import { UserStateActions } from "../state/User/Action";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-
-// ✅ Yup validation schema
-const LoginValidationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required"),
-  rememberMe: Yup.boolean()
-    .oneOf([true], "Please accept Remember Me")
-    .required("Required"),
-});
+import { LoginValidationSchema } from "../validators/ApplicationSchema";
 
 const LoginPage = (props: any): ReactElement => {
   const { setLoginStatus } = props;
@@ -65,8 +56,8 @@ const LoginPage = (props: any): ReactElement => {
       <Box className="login-contents">
         <Formik
           initialValues={{
-            email: "eve.holt@reqres.in",
-            password: "cityslicka",
+            email: "",
+            password: "",
             rememberMe: false,
           }}
           validationSchema={LoginValidationSchema}

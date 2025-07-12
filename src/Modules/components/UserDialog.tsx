@@ -17,6 +17,7 @@ import { ReactElement } from "react";
 import { IUser, IUserState } from "../../state/User/Reducer";
 import { UserListService } from "../../services/UserService";
 import { toast } from "react-toastify";
+import { UserSchema } from "../../validators/ApplicationSchema";
 
 interface IUserDialogProps {
   open: boolean;
@@ -38,15 +39,6 @@ const UserDialog = (props: IUserDialogProps): ReactElement => {
     applicationState,
     setUserList,
   } = props;
-
-  const validationSchema = Yup.object({
-    first_name: Yup.string().required("First name is required"),
-    last_name: Yup.string().required("Last name is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    avatar: Yup.string()
-      .url("Must be a valid URL")
-      .required("Avatar is required"),
-  });
 
   const handleFormSubmit = (values: any, formik: any) => {
     if (selectedUser === null) {
@@ -90,7 +82,7 @@ const UserDialog = (props: IUserDialogProps): ReactElement => {
   };
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open}>
+    <Dialog fullWidth maxWidth="sm" open={open} className="user-dialog">
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">
@@ -106,7 +98,7 @@ const UserDialog = (props: IUserDialogProps): ReactElement => {
         <Formik
           initialValues={initialValues}
           onSubmit={handleFormSubmit}
-          validationSchema={validationSchema}
+          validationSchema={UserSchema}
           enableReinitialize
         >
           {({
@@ -183,12 +175,17 @@ const UserDialog = (props: IUserDialogProps): ReactElement => {
               <Divider />
 
               <DialogActions sx={{ mt: 2 }}>
-                <Button onClick={onClose} color="secondary" variant="outlined">
+                <Button
+                  onClick={onClose}
+                  variant="outlined"
+                  className="btn-cancel"
+                >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  variant="contained"
+                  className="btn-submit"
+                  variant="outlined"
                   disabled={!isValid || isSubmitting}
                 >
                   {mode === "edit" ? "Update" : "Create"}

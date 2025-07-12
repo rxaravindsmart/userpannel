@@ -1,6 +1,4 @@
 .user-page {
-  background-color: #e9ecef;
-  height: 100vh;
   .header {
     display: flex;
     justify-content: end;
@@ -16,10 +14,12 @@
     }
   }
   .users-container {
+    background-color: #e9ecef;
+    height: 100vh;
+    // padding: 50px;
     .users {
       background-color: white;
       padding: 50px;
-      margin: 50px;
       border-radius: 10px;
       .btn-create {
         background-color: #1976d2;
@@ -113,5 +113,17 @@
         border-radius: 5px;
       }
     }
+  }
+}
+
+@media screen and (max-width: 668px) {
+  .users-container {
+    padding: 20px;
+  }
+}
+
+@media screen and (min-width: 668px) {
+  .users-container {
+    padding: 50px;
   }
 }

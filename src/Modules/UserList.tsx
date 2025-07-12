@@ -52,11 +52,14 @@ const UserList = (props: any): ReactElement => {
     setCurrentPage(1);
   };
 
-  const filteredUsers = applicationState.user.filter(
-    (user: IUser) =>
-      user.first_name.toLowerCase().includes(search.toLowerCase()) ||
-      user.last_name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredUsers = Array.isArray(applicationState.user)
+    ? applicationState.user.filter(
+        (user: IUser | null) =>
+          user &&
+          (user.first_name?.toLowerCase().includes(search.toLowerCase()) ||
+            user.last_name?.toLowerCase().includes(search.toLowerCase()))
+      )
+    : [];
 
   const paginatedUsers =
     activeView === "table"
@@ -102,10 +105,10 @@ const UserList = (props: any): ReactElement => {
     <Box className="users-container">
       <Box className="users">
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
             <Typography variant="h6">Users</Typography>
           </Grid>
-          <Grid item xs={9} textAlign="end">
+          <Grid item xs={12} md={9} textAlign="end">
             <TextField
               key={search}
               type="text"
@@ -204,63 +207,66 @@ const UserList = (props: any): ReactElement => {
           </Box>
         </Box>
         {activeView === "table" && (
-          <TableContainer sx={{ mt: 2 }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell />
-                  <TableCell>Email</TableCell>
-                  <TableCell>First Name</TableCell>
-                  <TableCell>Last Name</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paginatedUsers.map((user: IUser) => (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <img
-                        src={user.avatar}
-                        alt="Avatar"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50px",
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell className="blue">{user.email}</TableCell>
-                    <TableCell>{user.first_name}</TableCell>
-                    <TableCell>{user.last_name}</TableCell>
-                    <TableCell>
-                      <Button
-                        className="btn-prime my-2 px-3"
-                        onClick={() => {
-                          setSelectedUser(user);
-                          setOpen(true);
-                        }}
-                      >
-                        Edit
-                      </Button>
-
-                      <Button
-                        className="btn-error mx-2 px-3"
-                        onClick={() => {
-                          setShowConfirm(true);
-                          setSelectedUser(user);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
+          <Box
+            sx={{ mt: 2, overflowX: { xs: "auto", md: "auto", lg: "visible" } }}
+          >
+            <TableContainer sx={{ mt: 2 }}>
+              <Table size="small" style={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell />
+                    <TableCell>Email</TableCell>
+                    <TableCell>First Name</TableCell>
+                    <TableCell>Last Name</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {paginatedUsers.map((user: IUser) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        <img
+                          src={user.avatar}
+                          alt="Avatar"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell className="blue">{user.email}</TableCell>
+                      <TableCell>{user.first_name}</TableCell>
+                      <TableCell>{user.last_name}</TableCell>
+                      <TableCell>
+                        <Button
+                          className="btn-prime my-2 px-3"
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setOpen(true);
+                          }}
+                        >
+                          Edit
+                        </Button>
+
+                        <Button
+                          className="btn-error mx-2 px-3"
+                          onClick={() => {
+                            setShowConfirm(true);
+                            setSelectedUser(user);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
         )}
 
-        {/* Card View */}
         {activeView === "card" && (
           <Grid container spacing={2} mt={2}>
             {paginatedUsers.map((user: IUser) => (
