@@ -109,6 +109,7 @@ const UserDialog = (props: IUserDialogProps): ReactElement => {
             errors,
             isSubmitting,
             isValid,
+            dirty,
           }) => (
             <Form autoComplete="off">
               <Box className="mb-1">
@@ -186,7 +187,10 @@ const UserDialog = (props: IUserDialogProps): ReactElement => {
                   type="submit"
                   className="btn-submit"
                   variant="outlined"
-                  disabled={!isValid || isSubmitting}
+                  disabled={!isValid || !dirty || isSubmitting}
+                  style={{
+                    opacity: !isValid || !dirty || isSubmitting ? "0.7" : "1",
+                  }}
                 >
                   {mode === "edit" ? "Update" : "Create"}
                 </Button>
